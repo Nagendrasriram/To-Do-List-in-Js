@@ -13,8 +13,7 @@ An **interactive 3D To-Do List** built using **Three.js** and **GSAP** animation
 - ✅ **Minimal, dark-themed UI** for an aesthetic feel 🎨
 
 ## 🖼 Preview
-![Demo GIF](https://media.giphy.com/media/3o7bu3XilJ5BOiSGic/giphy.gif)  
-🔗 [Live Demo](#) (Add your deployed link here)
+🔗 [Live Dem](#) (https://nagendrasriram.github.io/To-Do-List-in-Js/)
 
 ## 🛠 Tech Stack
 - **Three.js** - For rendering 3D objects 🌍
