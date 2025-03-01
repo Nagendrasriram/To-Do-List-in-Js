@@ -47,5 +47,5 @@ Contributions are welcome! Feel free to fork the repo and submit a PR.
 This project is licensed under the MIT License. 📝
 
 ---
-💡 **Made with ❤️ by [Sriram Nagendra](https://github.com/your-username)**
+💡 **Made with ❤️ by [Sriram Nagendra](https://github.com/Nagendrasriram)**
 
