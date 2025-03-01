@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Animated To-Do List</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; background: #121212; color: white; }
+        #todo-input {
+            position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 10px; z-index: 10;
+        }
+        input, button {
+            padding: 10px; font-size: 16px; border: none; border-radius: 5px;
+        }
+        input { width: 200px; }
+        button { cursor: pointer; background: #ff4757; color: white; }
+        button:hover { background: #e84118; }
+        #task-display {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7); padding: 10px 20px; border-radius: 5px;
+            font-size: 18px; display: none; color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="todo-input">
+        <input type="text" id="task" placeholder="Add a task">
+        <button onclick="addTask()">Add</button>
+    </div>
+    <div id="task-display"></div>
+    <script>
+        let scene = new THREE.Scene();
+        let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        let renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        let tasks = [];
+        camera.position.z = 5;
+        let light = new THREE.PointLight(0xffffff, 1, 100);
+        light.position.set(5, 5, 5);
+        scene.add(light);
+
+        function addTask() {
+            let taskText = document.getElementById("task").value.trim();
+            if (!taskText) return;
+
+            let geometry = new THREE.BoxGeometry(1.5, 0.5, 0.3);
+            let material = new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff });
+            let taskCard = new THREE.Mesh(geometry, material);
+            
+            taskCard.position.set(Math.random() * 4 - 2, Math.random() * 4 - 2, Math.random() * 4 - 2);
+            scene.add(taskCard);
+            tasks.push({ mesh: taskCard, text: taskText });
+            
+            gsap.to(taskCard.rotation, { duration: 2, y: Math.PI * 2, repeat: -1, ease: "power1.inOut" });
+            gsap.from(taskCard.position, { duration: 1, y: 3, ease: "bounce.out" });
+            
+            document.getElementById("task").value = "";
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            tasks.forEach(task => {
+                task.mesh.rotation.y += 0.01;
+                task.mesh.rotation.x += 0.005;
+            });
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener("click", (event) => {
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scene.children);
+            if (intersects.length > 0) {
+                let clickedTask = tasks.find(task => task.mesh === intersects[0].object);
+                if (clickedTask) {
+                    let taskDisplay = document.getElementById("task-display");
+                    taskDisplay.innerText = clickedTask.text;
+                    taskDisplay.style.display = "block";
+                    gsap.fromTo(taskDisplay, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
+                    setTimeout(() => taskDisplay.style.display = "none", 3000);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
