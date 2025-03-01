@@ -23,7 +23,7 @@ An **interactive 3D To-Do List** built using **Three.js** and **GSAP** animation
 ## 📌 Setup & Usage
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/3D-ToDo-List.git
+https://github.com/Nagendrasriram/To-Do-List-in-Js.git
 cd 3D-ToDo-List
 
 # Open index.html in your browser
